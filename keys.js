@@ -7,6 +7,7 @@ var twitterKeys = {
   access_token_secret: 'Xq3fvYs3LC2v1wbNngEQAzFR0S6KAolNfSPFOc7umS2ml',
   spotifyId: 'dd72f5446c8242a5a222cd199840e581',
   spotifySecret: '66a7cd48b0594c2b8bdef5291ab7c5e2',
+  omdbapi: '70354f93',
 }
 
 

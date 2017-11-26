@@ -3,6 +3,8 @@ var keys = require('./keys.js');
 var request = require('request');
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
+var request = require('request')
+var fs = require('fs');
 //Then store the keys in a variable.
 var client = new Twitter({
     consumer_key: keys.consumer_key,
@@ -16,14 +18,19 @@ var spotify = new Spotify({
     secret: keys.spotifySecret
 });
 
+var omdbapi = keys.omdbapi;
 
 // Make it so liri.js can take in one of the following commands:
 var nodeArgs = process.argv;
-
+//var for search term, and add a space between if more than one word.
 var searchTerm = '';
-
 for (var i=3; i<nodeArgs.length; i++) {
-    searchTerm += ' ' + nodeArgs[i];  
+    searchTerm += nodeArgs[i] + ' ';  
+};
+//Specially formatted var for movie searches with a + sign between words and nothing in front.  This gets more accurate results.
+var movieSearchTerm = ''
+for (var i=3; i<nodeArgs.length; i++) {
+    movieSearchTerm += nodeArgs[i]+'+';  
 };
 
 // my-tweets----------------------------------------------------
@@ -43,6 +50,7 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 }
 // spotify-this-song--------------------------------------------
 else if (nodeArgs[2] === 'spotify-this-song') {
+    // If no song is provided then your program will default to "The Sign" by Ace of Base. 
     if (searchTerm === '') {
         searchTerm = 'The Sign artist:ace of base';
     }
@@ -56,36 +64,52 @@ else if (nodeArgs[2] === 'spotify-this-song') {
         }
        
     //   console.log(JSON.stringify(data, null, 2)); 
+// Artist(s)
+// The song's name
+// A preview link of the song from Spotify
+// The album that the song is from
     console.log("ARTIST(S):    "+data.tracks.items[0].album.artists[0].name);
     console.log("SONG NAME:    "+data.tracks.items[0].name);
     console.log("PREVIEW LINK: "+data.tracks.items[0].preview_url);
     console.log("ALBUM:        "+data.tracks.items[0].album.name);
       });
-    
-
-// Artist(s)
-// The song's name
-// A preview link of the song from Spotify
-// The album that the song is from
-// If no song is provided then your program will default to "The Sign" by Ace of Base. 
 }
 // movie-this----------------------------------------------------
 else if (nodeArgs[2] === 'movie-this') {
-    if (searchTerm === !null) {
-        searchTerm = searchTerm;
+    // If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
+    if (movieSearchTerm === '') {
+        movieSearchTerm = 'Mr+Nobody';        
     }
     else {
-        searchTerm = 'Mr. Nobody';
-    }
-    // * Title of the movie.
+        movieSearchTerm = movieSearchTerm;
+        };        
+    // console.log(movieSearchTerm);
+// Use Request to grab data from the OMDB API.
+    request('http://www.omdbapi.com/?t='+movieSearchTerm+'&apikey='+omdbapi, function (error, response, body) {
+    // console.log('error:', error); // Print the error if one occurred
+    // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    // console.log(JSON.stringify(response, null, 2)); 
+    //Parse the body into a JSON that we can work with
+    var bodyObject = JSON.parse(body);
+    // // * Title of the movie
+    console.log('TITLE:           '+bodyObject.Title);
     // * Year the movie came out.
+    console.log('YEAR:            '+bodyObject.Year);  
     // * IMDB Rating of the movie.
+    console.log('IMDB RATING:     '+bodyObject.Ratings[0].Value);
     // * Rotten Tomatoes Rating of the movie.
+    console.log('ROTTEN TOMATOES: '+bodyObject.Ratings[1].Value);
     // * Country where the movie was produced.
+    console.log('COUNTRY:         '+bodyObject.Country);
     // * Language of the movie.
+    console.log('LANGUAGE:        '+bodyObject.Language);
     // * Plot of the movie.
+    console.log('PLOT:            '+bodyObject.Plot);
     // * Actors in the movie.
-    // If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
+    console.log('ACTORS:          '+bodyObject.Actors);
+  });
+    
+    
     
 }
 // do-what-it-says----------------------------------------------
@@ -95,8 +119,9 @@ else if (nodeArgs[2] === 'do-what-it-says') {
     // Feel free to change the text in that document to test out the feature for other commands
 }
 
+//HANDLING WRONG COMMANDS-------------------------------------------
 else {
-    console.log("Dude, that command was not recognized.")
+    console.log("Dude, that command was not recognized. Below are the available commands and the format:")
     console.log('COMMANDS: my-tweets, spotify-this-song, movie-this, do-what-it-says');
     console.log('FORMAT: node liri.js [command] [search term]');
 }
