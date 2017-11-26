@@ -55,7 +55,11 @@ else if (nodeArgs[2] === 'spotify-this-song') {
           return console.log('Error occurred: ' + err);
         }
        
-      console.log(JSON.stringify(data, null, 2)); 
+    //   console.log(JSON.stringify(data, null, 2)); 
+    console.log("ARTIST(S):    "+data.tracks.items[0].album.artists[0].name);
+    console.log("SONG NAME:    "+data.tracks.items[0].name);
+    console.log("PREVIEW LINK: "+data.tracks.items[0].preview_url);
+    console.log("ALBUM:        "+data.tracks.items[0].album.name);
       });
     
 
