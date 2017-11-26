@@ -84,7 +84,8 @@ else if (nodeArgs[2] === 'movie-this') {
         movieSearchTerm = movieSearchTerm;
         };        
     // console.log(movieSearchTerm);
-// Use Request to grab data from the OMDB API.
+
+    // Use Request to grab data from the OMDB API.
     request('http://www.omdbapi.com/?t='+movieSearchTerm+'&apikey='+omdbapi, function (error, response, body) {
     // console.log('error:', error); // Print the error if one occurred
     // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
@@ -107,9 +108,7 @@ else if (nodeArgs[2] === 'movie-this') {
     console.log('PLOT:            '+bodyObject.Plot);
     // * Actors in the movie.
     console.log('ACTORS:          '+bodyObject.Actors);
-  });
-    
-    
+  });   
     
 }
 // do-what-it-says----------------------------------------------
@@ -117,6 +116,18 @@ else if (nodeArgs[2] === 'do-what-it-says') {
     // Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
     // It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
     // Feel free to change the text in that document to test out the feature for other commands
+    fs.readFile('random.txt', "utf8", function(err, data) {
+        if (err) {
+            console.log(err);
+        } else {
+            var splitArr = data.split(',');
+            splitArr.forEach(function(elem) {
+                console.log(elem);
+            });
+            }
+        });
+
+
 }
 
 //HANDLING WRONG COMMANDS-------------------------------------------
