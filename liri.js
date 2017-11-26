@@ -11,10 +11,11 @@ var client = new Twitter({
     access_token_secret: keys.access_token_secret
   });
 
-// var consumer_key = keys.consumer_key;
-// var consumer_secret = keys.consumer_secret;
-// var access_token_key = keys.access_token_key; 
-// var access_token_secret = keys.access_token_secret;
+var spotify = new Spotify({
+    id: keys.spotifyId,
+    secret: keys.spotifySecret
+});
+
 
 // Make it so liri.js can take in one of the following commands:
 var nodeArgs = process.argv;
@@ -25,14 +26,14 @@ for (var i=3; i<nodeArgs.length; i++) {
     searchTerm += ' ' + nodeArgs[i];  
 };
 
-// my-tweets
+// my-tweets----------------------------------------------------
 if (nodeArgs[2] === 'my-tweets') {
-// This will show your last 20 tweets and when they were created at in your terminal/bash window.
+// This will show your last 20 tweets and when they were created 
 var params = {screen_name: searchTerm};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
       for (var j=0; j<tweets.length && j<20; j++) {
-    console.log("Tweet # :" + (j+1));
+    console.log("Tweet # " + (j+1));
     console.log(tweets[j].text);
     console.log(tweets[j].created_at);
       }
@@ -40,16 +41,38 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
   }
 });
 }
-// spotify-this-song
+// spotify-this-song--------------------------------------------
 else if (nodeArgs[2] === 'spotify-this-song') {
+    // if (searchTerm === !null) {
+    //     searchTerm = searchTerm;
+    // }
+    // else {
+    //     searchTerm = 'The Sign';
+    // }
+
+    spotify.search({ type: 'track', query: searchTerm, limit: 1, market: 'US', }, function(err, data) {
+        if (err) {
+          return console.log('Error occurred: ' + err);
+        }
+       
+      console.log(JSON.stringify(data, null, 2)); 
+      });
+    
+
 // Artist(s)
 // The song's name
 // A preview link of the song from Spotify
 // The album that the song is from
 // If no song is provided then your program will default to "The Sign" by Ace of Base. 
 }
-// movie-this
+// movie-this----------------------------------------------------
 else if (nodeArgs[2] === 'movie-this') {
+    if (searchTerm === !null) {
+        searchTerm = searchTerm;
+    }
+    else {
+        searchTerm = 'Mr. Nobody';
+    }
     // * Title of the movie.
     // * Year the movie came out.
     // * IMDB Rating of the movie.
@@ -61,7 +84,7 @@ else if (nodeArgs[2] === 'movie-this') {
     // If the user doesn't type a movie in, the program will output data for the movie 'Mr. Nobody.'
     
 }
-// do-what-it-says
+// do-what-it-says----------------------------------------------
 else if (nodeArgs[2] === 'do-what-it-says') {
     // Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
     // It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
@@ -69,7 +92,7 @@ else if (nodeArgs[2] === 'do-what-it-says') {
 }
 
 else {
-    console.log("Command not recognized.")
+    console.log("Dude, that command was not recognized.")
     console.log('COMMANDS: my-tweets, spotify-this-song, movie-this, do-what-it-says');
     console.log('FORMAT: node liri.js [command] [search term]');
 }
