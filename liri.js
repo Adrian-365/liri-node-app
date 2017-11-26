@@ -43,12 +43,12 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 }
 // spotify-this-song--------------------------------------------
 else if (nodeArgs[2] === 'spotify-this-song') {
-    // if (searchTerm === !null) {
-    //     searchTerm = searchTerm;
-    // }
-    // else {
-    //     searchTerm = 'The Sign';
-    // }
+    if (searchTerm === '') {
+        searchTerm = 'The Sign artist:ace of base';
+    }
+    else {
+        searchTerm = searchTerm;
+    }
 
     spotify.search({ type: 'track', query: searchTerm, limit: 1, market: 'US', }, function(err, data) {
         if (err) {
