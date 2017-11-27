@@ -3,8 +3,8 @@ var keys = require('./keys.js');
 var request = require('request');
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
-var request = require('request')
 var fs = require('fs');
+var spawn = require('child_process').spawn;
 //Then store the keys in a variable.
 var client = new Twitter({
     consumer_key: keys.consumer_key,
@@ -114,18 +114,27 @@ else if (nodeArgs[2] === 'movie-this') {
 // do-what-it-says----------------------------------------------
 else if (nodeArgs[2] === 'do-what-it-says') {
     // Using the fs Node package, LIRI will take the text inside of random.txt and then use it to call one of LIRI's commands.
-    // It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
-    // Feel free to change the text in that document to test out the feature for other commands
     fs.readFile('random.txt', "utf8", function(err, data) {
         if (err) {
             console.log(err);
         } else {
             var splitArr = data.split(',');
-            splitArr.forEach(function(elem) {
-                console.log(elem);
-            });
+            var operator = splitArr[0];
+            var queryTerm = splitArr[1];
+            console.log('operator: '+operator);
+            console.log('queryTerm: '+queryTerm);
+
+            // splitArr.forEach(function(elem) {
+            //     console.log(elem);
+            // });
+    // It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
+    // Feel free to change the text in that document to test out the feature for other commands
+    
+            spawn(process.execPath, [operator, queryTerm]) ;
             }
         });
+
+        
 
 
 }
