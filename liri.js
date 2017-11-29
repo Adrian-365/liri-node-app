@@ -23,19 +23,19 @@ var omdbapi = keys.omdbapi;
 // variable that is the commands
 var nodeArgs = process.argv;
 //var for search term, and add a space between if more than one word.
-
+var searchTerm = '';
+// grab everthing after the 2nd index of the and turn it into the search term variable.
+for (var i = 3; i < nodeArgs.length; i++) {
+    searchTerm += nodeArgs[i] + ' ';
+};
+//Specially formatted var for movie searches with a + sign between words and nothing in front.  This gets more accurate results.
+var movieSearchTerm = ''
+for (var i = 3; i < nodeArgs.length; i++) {
+    movieSearchTerm += nodeArgs[i] + '+';
+};
 
 function run() {
-    var searchTerm = '';
-    // grab everthing after the 2nd index of the and turn it into the search term variable.
-    for (var i = 3; i < nodeArgs.length; i++) {
-        searchTerm += nodeArgs[i] + ' ';
-    };
-    //Specially formatted var for movie searches with a + sign between words and nothing in front.  This gets more accurate results.
-    var movieSearchTerm = ''
-    for (var i = 3; i < nodeArgs.length; i++) {
-        movieSearchTerm += nodeArgs[i] + '+';
-    };
+
 
     if (nodeArgs[2] === 'my-tweets' || 'spotify-this-song' || 'movie-ths') {
         // my-tweets----------------------------------------------------
@@ -127,8 +127,8 @@ function run() {
                 var splitArr = data.split(',');
                 var operator = splitArr[0];
                 var queryTerm = splitArr[1];
-                console.log('operator: ' + operator);
-                console.log('queryTerm: ' + queryTerm);
+                // console.log('operator: ' + operator);
+                // console.log('queryTerm: ' + queryTerm);
                 nodeArgs[2] = operator;
                 searchTerm = queryTerm;
                 run();
@@ -149,11 +149,12 @@ function run() {
     }
 
     //HANDLING WRONG COMMANDS-------------------------------------------
-    else {
-        console.log("Dude, that command was not recognized. Below are the available commands and the format:")
-        console.log('COMMANDS: my-tweets, spotify-this-song, movie-this, do-what-it-says');
-        console.log('FORMAT: node liri.js [command] [search term]');
-    }
+    //I couldn't get this to work, it would fire every time
+    // else if (!nodeArgs[2] === 'my-tweets' || 'spotify-this-song' || 'movie-ths' || 'do-what-it-says') {
+    //     console.log("Dude, that command was not recognized. Below are the available commands and the format:")
+    //     console.log('COMMANDS: my-tweets, spotify-this-song, movie-this, do-what-it-says');
+    //     console.log('FORMAT: node liri.js [command] [search term]');
+    // }
 
 }
 
