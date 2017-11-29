@@ -37,7 +37,7 @@ for (var i = 3; i < nodeArgs.length; i++) {
 function run() {
 
 
-    if (nodeArgs[2] === 'my-tweets' || 'spotify-this-song' || 'movie-ths') {
+    if (nodeArgs[2] === 'my-tweets' || 'spotify-this-song' || 'movie-this') {
         // my-tweets----------------------------------------------------
         if (nodeArgs[2] === 'my-tweets') {
             // This will show your last 20 tweets and when they were created 
@@ -130,16 +130,13 @@ function run() {
                 // console.log('operator: ' + operator);
                 // console.log('queryTerm: ' + queryTerm);
                 nodeArgs[2] = operator;
-                searchTerm = queryTerm;
-                run();
+                searchTerm = queryTerm;        
 
-                // splitArr.forEach(function(elem) {
-                //     console.log(elem);
-                // });
+
                 // It should run spotify-this-song for "I Want it That Way," as follows the text in random.txt.
                 // Feel free to change the text in that document to test out the feature for other commands
 
-                // spawn(process.execPath, [operator, queryTerm]) ;
+                run();
             }
         });
 
@@ -150,7 +147,7 @@ function run() {
 
     //HANDLING WRONG COMMANDS-------------------------------------------
     //I couldn't get this to work, it would fire every time
-    // else if (!nodeArgs[2] === 'my-tweets' || 'spotify-this-song' || 'movie-ths' || 'do-what-it-says') {
+    // else {
     //     console.log("Dude, that command was not recognized. Below are the available commands and the format:")
     //     console.log('COMMANDS: my-tweets, spotify-this-song, movie-this, do-what-it-says');
     //     console.log('FORMAT: node liri.js [command] [search term]');
